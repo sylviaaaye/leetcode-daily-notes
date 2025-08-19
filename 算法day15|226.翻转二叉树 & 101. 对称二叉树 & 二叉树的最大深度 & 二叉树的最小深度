@@ -1,0 +1,137 @@
+# 代码随想录算法day1|704. 二分查找 & 27. 移除元素 & 977.有序数组的平方（已过）
+
+## 今日刷题列表
+- [226.翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/description/) - 难度0
+- [101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/description/) - 难度0
+- [104.二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/description/) - 难度0
+- [111.二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/) - 难度1
+
+## 每题总结
+
+### 题目1
+- 解题思路：
+- 易错点/注意点：
+- 代码实现：
+
+```cpp
+class Solution {
+public:
+    TreeNode* getInvert(TreeNode* root){
+        if(root == NULL) return NULL;
+        swap(root->left, root->right);
+        getInvert(root->left);
+        getInvert(root->right);
+        return root;
+
+
+    }
+    TreeNode* invertTree(TreeNode* root) {
+        if(root == NULL) return NULL;
+        return getInvert(root);
+        
+    }
+};
+```
+
+- 复盘与提升：即使一边是空也可以swap
+
+---
+
+### 题目2
+- 解题思路：
+- 易错点/注意点：
+- 代码实现：
+
+```cpp
+class Solution {
+public:
+    bool check(TreeNode* left, TreeNode* right){
+        if(left == NULL && right != NULL){
+            return false;
+        }else if(left != NULL && right == NULL){
+            return false;
+        }else if(left == NULL && right == NULL){
+            return true;
+        }else if(left->val != right->val){
+            return false;}
+
+        bool inside = check(left->right, right->left);
+        bool outside = check(left->left, right->right);
+        return inside&&outside;
+    }
+    bool isSymmetric(TreeNode* root) {
+        if(root == NULL) return true;
+        return check(root->left, root->right);
+        
+    }
+};
+```
+
+- 复盘与提升：对称就需要分类讨论了
+
+---
+
+### 题目3
+- 解题思路：
+- 易错点/注意点：
+- 代码实现：
+
+```cpp
+class Solution {
+public:
+    int getDepth(TreeNode* root){
+        if(root == NULL){
+            return 0;
+        }
+        int leftDepth = getDepth(root->left);
+        int righDepth = getDepth(root->right);
+        return 1+ max(leftDepth, righDepth);
+    }
+    int maxDepth(TreeNode* root) {
+        if(root == NULL) return 0;
+        return getDepth(root);
+    }
+};
+```
+
+- 复盘与提升：正常情况
+
+---
+
+```cpp
+class Solution { 
+public:
+    int getDepth(TreeNode* root){
+        if(root == NULL) return 0;
+        int leftDepth = getDepth(root->left);
+        int rightDepth = getDepth(root->right);
+        if(root->right == NULL && root->left != NULL){
+            return 1+ leftDepth;
+        }
+        else if(root->left == NULL && root->right != NULL){
+            return 1+ rightDepth;
+        }else{
+            return 1+ min(rightDepth,leftDepth);
+        }
+    }
+
+    int minDepth(TreeNode* root) {
+        if(root == NULL) return 0;
+        return getDepth(root);
+
+        
+    }
+};
+```
+
+- 复盘与提升：最小一定是叶子节点，所以要排除直接是根节点的情况。（除非只有根）
+
+---
+
+
+## 今日总结
+- 学习时长：1h
+- 收获：
+- 困难：
+1.时间复杂度还没看
+
