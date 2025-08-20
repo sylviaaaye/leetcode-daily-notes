@@ -1,0 +1,146 @@
+# 代码随想录算法day1|704. 二分查找 & 27. 移除元素 & 977.有序数组的平方（已过）
+
+## 今日刷题列表
+- [110.平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/) - 难度1
+- [257. 二叉树的所有路径](https://leetcode.cn/problems/binary-tree-paths/) - 难度2
+- [404.左叶子之和](https://leetcode.cn/problems/sum-of-left-leaves/) - 难度0
+- [222.完全二叉树的节点个数](https://leetcode.cn/problems/count-complete-tree-nodes/) - 难度0
+
+## 每题总结
+
+### 题目1
+- 解题思路：
+- 易错点/注意点：
+- 代码实现：
+
+```cpp
+class Solution {
+public:
+    int check(TreeNode* node){
+        if(node == NULL) return 0;
+        int leftHeight = check(node->left); 
+        if(leftHeight == -1) return -1;
+        int rightHeight = check(node->right);
+        if(rightHeight == -1) return -1;
+        if(abs(leftHeight-rightHeight)>1) return  -1;
+        else  return 1+max(leftHeight,rightHeight);
+
+    }
+
+    bool isBalanced(TreeNode* root) {
+        if (check(root) != -1) return true;
+        else return false;
+    }
+};
+```
+
+- 复盘与提升：不懂为什么1+max(leftHeight,rightHeight);
+
+---
+
+### 题目2
+- 解题思路：
+- 易错点/注意点：
+- 代码实现：
+
+```cpp
+class Solution {
+private:
+
+        void traversal(TreeNode* node, vector<int>& path, vector<string>& sPath) {
+        path.push_back(node->val);
+
+        if(node->left == NULL && node->right == NULL){
+        string s;
+        for(int i = 0;i<path.size()-1;i++){
+            s += to_string(path[i]);
+            s += "->";
+        }
+        s += to_string(path[path.size() - 1]);
+        sPath.push_back(s);
+        return;
+        }
+
+        if(node->left){
+        traversal(node->left, path, sPath);
+        path.pop_back();}
+
+        if(node->right){
+        traversal(node->right, path, sPath);
+        path.pop_back();}
+
+
+    }
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<int> path;
+    vector<string> sPath;
+        if(root == NULL) return sPath;
+        traversal(root, path, sPath);
+        return sPath;
+    }
+};
+```
+
+- 复盘与提升：回溯里面的小细节没推敲
+
+---
+
+### 题目3
+- 解题思路：
+- 易错点/注意点：
+- 代码实现：
+
+```cpp
+class Solution {
+public:
+    int sum(TreeNode* node){
+        if(node == NULL) return 0;
+        if(node->left == NULL && node->right == NULL) return 0;
+
+        int leftSum = sum(node->left);
+        if(node->left != NULL && node->left->left == NULL && node->left->right == NULL)
+        leftSum = node->left->val;
+         
+        int rightSum = sum(node->right);
+        return leftSum + rightSum;
+    }
+    int sumOfLeftLeaves(TreeNode* root) {
+        return sum(root);
+
+        
+    }
+};
+```
+
+- 复盘与提升：leftSum = node->left->val;两次定义啥意思
+
+---
+
+```cpp
+class Solution {
+public:
+    int count(TreeNode* node){
+        if(node == NULL){
+            return 0;
+        }
+        int leftCount = count(node->left);
+        int rightCount = count(node->right);
+        return leftCount+rightCount+1;
+    }
+    int countNodes(TreeNode* root) {
+        return count(root);
+    }
+};
+```
+
+- 复盘与提升：
+
+---
+
+
+## 今日总结
+- 学习时长：1h
+- 收获：
+- 困难：
+1.没仔细看
